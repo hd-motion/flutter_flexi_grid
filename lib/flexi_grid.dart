@@ -1,5 +1,7 @@
 library flexi_grid;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class FlexiGrid extends StatefulWidget {
@@ -8,21 +10,37 @@ class FlexiGrid extends StatefulWidget {
 }
 
 class _FlexiGridState extends State<FlexiGrid> {
-  List<int> gridItemList = List.generate(13, (int index) => index + 1);
+  List<int> gridItemList = List.generate(53, (int index) => index + 1);
   int crossAxisCount = 2;
-  double _scaleFactor = 8.0;
-  double _baseScaleFactor = 5.0;
+  double _scaleFactor = 19.0;
+  double _baseScaleFactor = 1.0;
+  double _tempScaleFactor;
+  double _tempScale;
+
+  @override
+  void initState() {
+    super.initState();
+    _tempScaleFactor = _scaleFactor;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onScaleStart: (details) {
         _baseScaleFactor = _scaleFactor;
+        // print(object);
       },
       onScaleUpdate: (details) {
         print(details.scale);
-        setState(() {
+        if (_tempScale != details.scale) {
           _scaleFactor = _baseScaleFactor / details.scale;
-        });
+          if (_tempScaleFactor.ceil() != _scaleFactor.ceil()) {
+            
+            _tempScale = details.scale;
+            _tempScaleFactor = _scaleFactor;
+            setState(() {});
+          }
+        }
       },
       child: GridView.builder(
         physics: NeverScrollableScrollPhysics(),
@@ -37,7 +55,8 @@ class _FlexiGridState extends State<FlexiGrid> {
         //  getProductList(i, j, ctx).length,
         itemBuilder: (context, index) {
           return Container(
-              color: Colors.green,
+              color:
+                  Colors.primaries[Random().nextInt(Colors.primaries.length)],
               child: Center(
                   child: Text(
                 "Item: ${gridItemList[index]}",
