@@ -10,8 +10,8 @@ class FlexiGrid extends StatefulWidget {
 class _FlexiGridState extends State<FlexiGrid> {
   List<int> gridItemList = List.generate(13, (int index) => index + 1);
   int crossAxisCount = 2;
-  double _scaleFactor = 4.0;
-  double _baseScaleFactor = 1.0;
+  double _scaleFactor = 8.0;
+  double _baseScaleFactor = 5.0;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -21,7 +21,7 @@ class _FlexiGridState extends State<FlexiGrid> {
       onScaleUpdate: (details) {
         print(details.scale);
         setState(() {
-          _scaleFactor = _baseScaleFactor * details.scale;
+          _scaleFactor = _baseScaleFactor / details.scale;
         });
       },
       child: GridView.builder(
